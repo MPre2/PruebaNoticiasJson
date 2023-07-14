@@ -1,27 +1,27 @@
 document.addEventListener("DOMContentLoaded", function () {
+  // Modulo para ejecutar todo el contenido cuando se ingresa en el sitio
   const bookContainer = document.querySelector("#book-container");
   const bookForm = document.querySelector("#book-form");
 
-  fetch("http://localhost:3000/noticias")
+  fetch("http://localhost:3000/noticias") // fetch para la lectura del contenido del JSON con las noticias (GET)
     .then((response) => response.json())
-    .then((noticias) => verData(noticias))
+    .then((noticias) => {
+      for (i = 0; i < noticias.length; i++) {
+        bookContainer.innerHTML += `
+        <div id=${noticias[i].id}>
+          <h2>${noticias[i].title}</h2>
+          <h4>Author: ${noticias[i].author}</h4>
+          <img src="${noticias[i].coverImage}" width="333" height="500">
+          <p>${noticias[i].description}</p>
+          <button data-id="${noticias[i].id}" id="edit-${noticias[i].id}" data-action="edit">Edit</button>
+          <button data-id="${noticias[i].id}" id="delete-${noticias[i].id}" data-action="delete">Delete</button>
+        </div>`;
+      }
+    })
     .catch((error) => console.log("Archivo no adquirido", error));
 
-  const verData = (noticias) => {
-    for (i = 0; i <= noticias.length; i++) {
-      bookContainer.innerHTML += `
-      <div id=${noticias[i].id}>
-        <h2>${noticias[i].title}</h2>
-        <h4>Author: ${noticias[i].author}</h4>
-        <img src="${noticias[i].coverImage}" width="333" height="500">
-        <p>${noticias[i].description}</p>
-        <button data-id="${noticias[i].id}" id="edit-${noticias[i].id}" data-action="edit">Edit</button>
-        <button data-id="${noticias[i].id}" id="delete-${noticias[i].id}" data-action="delete">Delete</button>
-      </div>`;
-    }
-  }; // end of book fetch
-
   bookForm.addEventListener("submit", (e) => {
+    // Modulo que crea el contenedor de la noticia dentro del JSON (CREATE / POST)
     e.preventDefault();
 
     const titleInput = bookForm.querySelector("#title").value;
@@ -42,8 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
       },
     })
       .then((response) => response.json())
-      .then((noticias) => {
-        const noticia = noticias.noticias;
+      .then((noticia) => {
         bookContainer.innerHTML += `
         <div id=${noticia.id}>
             <h2>${noticia.title}</h2>
@@ -62,39 +61,46 @@ document.addEventListener("DOMContentLoaded", function () {
     let allBooks = [];
     fetch("http://localhost:3000/noticias")
       .then((response) => response.json())
-      .then((noticias) =>
-        noticias.forEach(function (noticia) {
-          allBooks = noticia;
-          bookContainer.innerHTML += `
-          <div id=book-${noticia.id}>
-            <h2>${noticia.title}</h2>
-            <h4>Author: ${noticia.author}</h4>
-            <img src="${noticia.coverImage}" width="333" height="500">
-            <p>${noticia.description}</p>
-            <button data-id="${noticia.id}" id="edit-${noticia.id}" data-action="edit">Edit</button>
-            <button data-id="${noticia.id}" id="delete-${noticia.id}" data-action="delete">Delete</button>
-          </div>`;
-        })
-      ); // end of book fetch
-    console.log(allBooks);
+      .then((noticias) => {
+        for (i = 0; i < noticias.length; i++) {
+          allBooks[i] = noticias[i];
+          // Código sin utilidad al momento
+          /*bookContainer.innerHTML += `
+          <div id=book-${noticias[i].id}>
+            <h2>${noticias[i].title}</h2>
+            <h4>Author: ${noticias[i].author}</h4>
+            <img src="${noticias[i].coverImage}" width="333" height="500">
+            <p>${noticias[i].description}</p>
+            <button data-id="${noticias[i].id}" id="edit-${noticias[i].id}" data-action="edit">Edit</button>
+            <button data-id="${noticias[i].id}" id="delete-${noticias[i].id}" data-action="delete">Delete</button>
+          </div>`;*/
+        }
+      });
+
     if (e.target.dataset.action === "edit") {
       const editButton = document.querySelector(`#edit-${e.target.dataset.id}`);
       editButton.disabled = true;
 
-      const noticia = allBooks.find((noticia) => {
-        return noticia.id == e.target.dataset.id;
-      });
-
+      const noticias = (allBooks) => { // VER COMO SOLUCIONAR EL VACIO EN LA MATRIZ
+        for (i = 0; i < allBooks.length; i++) {
+          if (allBooks[i].id === e.target.dataset.id) {
+            return allBooks[i];
+          }
+        }
+      };
+            
       e.target.parentElement.innerHTML += `
       <div id='edit-book'>
         <form id="book-form">
-          <input required id="edit-title" placeholder="${noticia.title}">
-          <input required id="edit-author" placeholder="${noticia.author}">
-          <input required id="edit-coverImage" placeholder="${noticia.coverImage}">
-          <input required id="edit-description" placeholder="${noticia.description}">
+          <input required id="edit-title" placeholder="${noticias.title}">
+          <input required id="edit-author" placeholder="${noticias.author}">
+          <input required id="edit-coverImage" placeholder="${noticias.coverImage}">
+          <input required id="edit-description" placeholder="${noticias.description}">
           <input type="submit" value="Edit Book">
       </div>`;
-      editForm.addEventListener("submit", (e) => {
+
+      editForm.addEventListener("submit", (e) => { // VER PORQUE NO SE PUEDE GENERAR LA VISTA
+        // Edición de los datos de la noticia seleccionada
         event.preventDefault();
         const titleInput = document.querySelector("#edit-title").value;
         const authorInput = document.querySelector("#edit-author").value;
@@ -102,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function () {
           document.querySelector("#edit-coverImage").value;
         const descInput = document.querySelector("#edit-description").value;
         const editedBook = document.querySelector(`#book-${noticias.id}`);
-        fetch(`${bookURL}/${noticias.id}`, {
+        fetch(`http://localhost:3000/noticias/${e.target.dataset.id}`, {
           method: "PATCH",
           body: JSON.stringify({
             title: titleInput,
@@ -117,20 +123,19 @@ document.addEventListener("DOMContentLoaded", function () {
           .then((response) => response.json())
           .then((noticia) => {
             editedBook.innerHTML = `
-          <div id=book-${noticia.id}>
-            <h2>${noticia.title}</h2>
-            <h4>Author: ${noticia.author}</h4>
-            <img src="${noticia.coverImage}" width="333" height="500">
-            <p>${noticia.description}</p>
-            <button data-id=${noticia.id} id="edit-${noticia.id}" data-action="edit">Edit</button>
-            <button data-id=${noticia.id} id="delete-${noticia.id}" data-action="delete">Delete</button>
-          </div>
-          <div id=edit-book-${noticia.id}>
-          </div>`;
+            <div id=book-${e.target.dataset.id}>
+              <h2>${noticia.title}</h2>
+              <h4>Author: ${noticia.author}</h4>
+              <img src="${noticia.coverImage}" width="333" height="500">
+              <p>${noticia.description}</p>
+              <button data-id=${noticia.id} id="edit-${noticia.id}" data-action="edit">Edit</button>
+              <button data-id=${noticia.id} id="delete-${noticia.id}" data-action="delete">Delete</button>
+            </div>
+            <div id=edit-book-${noticia.id}>
+            </div>`;
             editForm.innerHTML = "";
           });
-      }); // end of this event Listener for edit submit
-      console.log("you pressed edit");
+      });
     } else if (e.target.dataset.action === "delete") {
       //MODULO FUNCIONAL - VER PORQUE HAY QYE REALIZAR LA DOBLE CONFIRMACIÓN DE LA ELIMINACIÓN
       document.querySelector(`#book-${e.target.dataset.id}`).remove();
@@ -139,8 +144,9 @@ document.addEventListener("DOMContentLoaded", function () {
         headers: {
           "Content-Type": "application/json",
         },
-      }).then((response) => response.json());
-      console.log("you pressed delete");
+      })
+        .then((response) => response.json())
+        .catch((error) => console.log("Archivo no adquirido", error));
     }
-  }); // end of eventListener for editing and deleting a book
+  });
 });
