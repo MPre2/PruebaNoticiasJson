@@ -64,42 +64,30 @@ document.addEventListener("DOMContentLoaded", function () {
       .then((noticias) => {
         for (i = 0; i < noticias.length; i++) {
           allBooks[i] = noticias[i];
-          // Código sin utilidad al momento
-          /*bookContainer.innerHTML += `
-          <div id=book-${noticias[i].id}>
-            <h2>${noticias[i].title}</h2>
-            <h4>Author: ${noticias[i].author}</h4>
-            <img src="${noticias[i].coverImage}" width="333" height="500">
-            <p>${noticias[i].description}</p>
-            <button data-id="${noticias[i].id}" id="edit-${noticias[i].id}" data-action="edit">Edit</button>
-            <button data-id="${noticias[i].id}" id="delete-${noticias[i].id}" data-action="delete">Delete</button>
-          </div>`;*/
         }
       });
 
     if (e.target.dataset.action === "edit") {
+      //THEN
       const editButton = document.querySelector(`#edit-${e.target.dataset.id}`);
       editButton.disabled = true;
 
-      const noticias = (allBooks) => { // VER COMO SOLUCIONAR EL VACIO EN LA MATRIZ
-        for (i = 0; i < allBooks.length; i++) {
-          if (allBooks[i].id === e.target.dataset.id) {
-            return allBooks[i];
-          }
-        }
-      };
-            
-      e.target.parentElement.innerHTML += `
-      <div id='edit-book'>
-        <form id="book-form">
-          <input required id="edit-title" placeholder="${noticias.title}">
-          <input required id="edit-author" placeholder="${noticias.author}">
-          <input required id="edit-coverImage" placeholder="${noticias.coverImage}">
-          <input required id="edit-description" placeholder="${noticias.description}">
-          <input type="submit" value="Edit Book">
-      </div>`;
+      let noticia = allBooks.filter((book) => book.id === e.target.dataset.id);
+      console.log(allBooks);
+      console.log(noticia);
 
-      editForm.addEventListener("submit", (e) => { // VER PORQUE NO SE PUEDE GENERAR LA VISTA
+      /* e.target.parentElement.innerHTML += `
+        <div id='edit-book'>
+          <form id="book-form">
+            <input required id="edit-title" placeholder="${noticia.title}">
+            <input required id="edit-author" placeholder="${noticia.author}">
+            <input required id="edit-coverImage" placeholder="${noticia.coverImage}">
+            <input required id="edit-description" placeholder="${noticia.description}">
+            <input type="submit" value="Edit Book">
+        </div>`;
+
+      editForm.addEventListener("submit", (e) => {
+        // VER PORQUE NO SE PUEDE GENERAR LA VISTA
         // Edición de los datos de la noticia seleccionada
         event.preventDefault();
         const titleInput = document.querySelector("#edit-title").value;
@@ -135,10 +123,9 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>`;
             editForm.innerHTML = "";
           });
-      });
+      });*/
     } else if (e.target.dataset.action === "delete") {
-      //MODULO FUNCIONAL - VER PORQUE HAY QYE REALIZAR LA DOBLE CONFIRMACIÓN DE LA ELIMINACIÓN
-      document.querySelector(`#book-${e.target.dataset.id}`).remove();
+      //MODULO QUE ELIMINA UNA NOTICIA
       fetch(`http://localhost:3000/noticias/${e.target.dataset.id}`, {
         method: "DELETE",
         headers: {
@@ -147,6 +134,10 @@ document.addEventListener("DOMContentLoaded", function () {
       })
         .then((response) => response.json())
         .catch((error) => console.log("Archivo no adquirido", error));
+    }
+
+    function newFunction() {
+      return [];
     }
   });
 });
