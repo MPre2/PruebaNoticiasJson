@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Modulo para ejecutar todo el contenido cuando se ingresa en el sitio
   const bookContainer = document.querySelector("#book-container");
   const bookForm = document.querySelector("#book-form");
+  const editForm = document.querySelector("#editForm");
 
   fetch("http://localhost:3000/noticias") // fetch para la lectura del contenido del JSON con las noticias (GET)
     .then((response) => response.json())
@@ -62,9 +63,9 @@ document.addEventListener("DOMContentLoaded", function () {
     fetch("http://localhost:3000/noticias")
       .then((response) => response.json())
       .then((noticias) => {
-        for (i = 0; i < noticias.length; i++) {
-          allBooks[i] = noticias[i];
-        }
+        noticias.forEach((noticia) => {
+          allBooks.push(noticia);
+        });
       });
 
     if (e.target.dataset.action === "edit") {
@@ -72,45 +73,45 @@ document.addEventListener("DOMContentLoaded", function () {
       const editButton = document.querySelector(`#edit-${e.target.dataset.id}`);
       editButton.disabled = true;
 
-      let noticia = allBooks.filter((book) => book.id === e.target.dataset.id);
-      console.log(allBooks);
-      console.log(noticia);
+      fetch(`http://localhost:3000/noticias/${e.target.dataset.id}`)
+        .then((response) => response.json())
+        .then((noticia) => {
+          e.target.parentElement.innerHTML += `
+          <div id='edit-book'>
+            <form id="book-form">
+              <input required id="edit-title" value="${noticia.title}">
+              <input required id="edit-author" value="${noticia.author}">
+              <input required id="edit-coverImage" value="${noticia.coverImage}">
+              <input required id="edit-description" value="${noticia.description}">
+              <input id="editForm" type="submit" value="Edit Book">
+          </div>`;
+        });
 
-      /* e.target.parentElement.innerHTML += `
-        <div id='edit-book'>
-          <form id="book-form">
-            <input required id="edit-title" placeholder="${noticia.title}">
-            <input required id="edit-author" placeholder="${noticia.author}">
-            <input required id="edit-coverImage" placeholder="${noticia.coverImage}">
-            <input required id="edit-description" placeholder="${noticia.description}">
-            <input type="submit" value="Edit Book">
-        </div>`;
-
-      editForm.addEventListener("submit", (e) => {
-        // VER PORQUE NO SE PUEDE GENERAR LA VISTA
-        // Edición de los datos de la noticia seleccionada
-        event.preventDefault();
-        const titleInput = document.querySelector("#edit-title").value;
-        const authorInput = document.querySelector("#edit-author").value;
-        const coverImageInput =
-          document.querySelector("#edit-coverImage").value;
-        const descInput = document.querySelector("#edit-description").value;
-        const editedBook = document.querySelector(`#book-${noticias.id}`);
-        fetch(`http://localhost:3000/noticias/${e.target.dataset.id}`, {
-          method: "PATCH",
-          body: JSON.stringify({
-            title: titleInput,
-            author: authorInput,
-            coverImage: coverImageInput,
-            description: descInput,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-          .then((response) => response.json())
-          .then((noticia) => {
-            editedBook.innerHTML = `
+      if (editForm) { //VERIFICAR EL FUNCIONAMIENTO DE ESTE MODULO Y VER PORQUE NO GENERA LAS MODIFICACIONES EN EL "JSON"
+        editForm.addEventListener("submit", (e) => {
+          // Edición de los datos de la noticia seleccionada
+          e.preventDefault();
+          const titleInput = document.querySelector("#edit-title").value;
+          const authorInput = document.querySelector("#edit-author").value;
+          const coverImageInput =
+            document.querySelector("#edit-coverImage").value;
+          const descInput = document.querySelector("#edit-description").value;
+          const editedBook = document.querySelector(`#book-${noticia.id}`);
+          fetch(`http://localhost:3000/noticias/${e.target.dataset.id}`, {
+            method: "PATCH",
+            body: JSON.stringify({
+              title: titleInput,
+              author: authorInput,
+              coverImage: coverImageInput,
+              description: descInput,
+            }),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+            .then((response) => response.json())
+            .then((noticia) => {
+              editedBook.innerHTML = `
             <div id=book-${e.target.dataset.id}>
               <h2>${noticia.title}</h2>
               <h4>Author: ${noticia.author}</h4>
@@ -121,9 +122,10 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
             <div id=edit-book-${noticia.id}>
             </div>`;
-            editForm.innerHTML = "";
-          });
-      });*/
+              editForm.innerHTML = "";
+            });
+        });
+      }
     } else if (e.target.dataset.action === "delete") {
       //MODULO QUE ELIMINA UNA NOTICIA
       fetch(`http://localhost:3000/noticias/${e.target.dataset.id}`, {
