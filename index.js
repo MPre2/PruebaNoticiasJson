@@ -55,17 +55,19 @@ document.addEventListener("DOMContentLoaded", function () {
         </div>`;
       })
       .catch((error) => console.log("Archivo no adquirido", error));
-  }); //FUNCIONANDO HASTA ACA
+  });
 
   bookContainer.addEventListener("click", (e) => {
-    //MODULO DE EDICIÓN - ARREGLAR EL FUNCIONAMIENTO DEL MISMO
+    //MODULO DE EDICIÓN - VERIFICA QUE BOTON FUE CLICKEADO Y EN BASE A ESO RECURRE A REALIZAR LAS ACCIONES CORRESPONDIENTES
     let allBooks = [];
     fetch("http://localhost:3000/noticias")
       .then((response) => response.json())
       .then((noticias) => {
-        noticias.forEach((noticia) => {
-          allBooks.push(noticia);
-        });
+        noticias
+          .forEach((noticia) => {
+            allBooks.push(noticia);
+          })
+      .catch((error) => console.log("Archivo no adquirido", error));
       });
 
     if (e.target.dataset.action === "edit") {
@@ -73,7 +75,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const editButton = document.querySelector(`#edit-${e.target.dataset.id}`);
       editButton.disabled = true;
 
-      fetch(`http://localhost:3000/noticias/${e.target.dataset.id}`)
+      fetch(`http://localhost:3000/noticias/${e.target.dataset.id}`) // VUELCA LOS DATOS DEL OBJETO A MODIFICAR EN PANTALLA
         .then((response) => response.json())
         .then((noticia) => {
           e.target.parentElement.innerHTML += `
@@ -87,7 +89,8 @@ document.addEventListener("DOMContentLoaded", function () {
           </div>`;
         });
 
-      if (editForm) { //VERIFICAR EL FUNCIONAMIENTO DE ESTE MODULO Y VER PORQUE NO GENERA LAS MODIFICACIONES EN EL "JSON"
+      if (editForm) {
+        //VERIFICAR EL FUNCIONAMIENTO DE ESTE MODULO Y VER PORQUE NO GENERA LAS MODIFICACIONES EN EL "JSON"
         editForm.addEventListener("submit", (e) => {
           // Edición de los datos de la noticia seleccionada
           e.preventDefault();
