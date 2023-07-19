@@ -1,20 +1,29 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <title>Listado de Noticias</title>
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        background-color: black;
+        color: white;
+      }
+    </style>
   </head>
   <body>
     <h1>Listado de Noticias</h1>
-    <div id='create-book'>
+    <div id="create-book">
       <form id="book-form">
-        <input id="title" placeholder="Titulo...">
-        <input id="author" placeholder="Resumen...">
-        <input id="coverImage" placeholder="Imagen / Foto...">
-        <input id="description" placeholder="Noticia...">
-        <input type="submit" value="Agregar Noticia">
+        <input id="title" placeholder="Titulo..." />
+        <input id="author" placeholder="Resumen..." />
+        <input id="coverImage" placeholder="Imagen / Foto..." />
+        <input id="description" placeholder="Noticia..." />
+        <input type="submit" value="Agregar Noticia" />
+      </form>
     </div>
-    <div id='book-container'></div>
-<script src='index.js'></script>
+    <div id="book-container"></div>
+    <script src="index.js"></script>
   </body>
 </html>

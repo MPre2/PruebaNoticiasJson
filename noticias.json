@@ -1,11 +1,18 @@
 {
   "noticias": [
     {
-      "title": "Imag",
-      "author": "pica Pica",
+      "title": "Imagen",
+      "author": "Pica",
       "coverImage": "https://i.blogs.es/ceda9c/dalle/450_1000.jpg",
-      "description": "erfarwe r er er ",
+      "description": "Breve descripcion del contenido de lña noticia",
       "id": 2
+    },
+    {
+      "title": "New Img",
+      "author": "Prueba",
+      "coverImage": "https://images.ctfassets.net/hrltx12pl8hq/5KiKmVEsCQPMNrbOE6w0Ot/341c573752bf35cb969e21fcd279d3f9/hero-img_copy.jpg?fit=fill&w=600&h=400",
+      "description": "Test numero 2",
+      "id": 3
     }
   ]
 }

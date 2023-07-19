@@ -7,17 +7,17 @@ document.addEventListener("DOMContentLoaded", function () {
   fetch("http://localhost:3000/noticias") // fetch para la lectura del contenido del JSON con las noticias (GET)
     .then((response) => response.json())
     .then((noticias) => {
-      for (i = 0; i < noticias.length; i++) {
+      noticias.forEach((noticia) => {
         bookContainer.innerHTML += `
-        <div id=${noticias[i].id}>
-          <h2>${noticias[i].title}</h2>
-          <h4>Author: ${noticias[i].author}</h4>
-          <img src="${noticias[i].coverImage}" width="333" height="500">
-          <p>${noticias[i].description}</p>
-          <button data-id="${noticias[i].id}" id="edit-${noticias[i].id}" data-action="edit">Edit</button>
-          <button data-id="${noticias[i].id}" id="delete-${noticias[i].id}" data-action="delete">Delete</button>
+        <div id=${noticia.id}>
+          <h2>${noticia.title}</h2>
+          <h4>Author: ${noticia.author}</h4>
+          <img src="${noticia.coverImage}" width="333" height="500">
+          <p>${noticia.description}</p>
+          <button data-id="${noticia.id}" id="edit-${noticia.id}" data-action="edit">Edit</button>
+          <button data-id="${noticia.id}" id="delete-${noticia.id}" data-action="delete">Delete</button>
         </div>`;
-      }
+      });
     })
     .catch((error) => console.log("Archivo no adquirido", error));
 
@@ -59,16 +59,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   bookContainer.addEventListener("click", (e) => {
     //MODULO DE EDICIÓN - VERIFICA QUE BOTON FUE CLICKEADO Y EN BASE A ESO RECURRE A REALIZAR LAS ACCIONES CORRESPONDIENTES
-    let allBooks = [];
-    fetch("http://localhost:3000/noticias")
-      .then((response) => response.json())
-      .then((noticias) => {
-        noticias
-          .forEach((noticia) => {
-            allBooks.push(noticia);
-          })
-      .catch((error) => console.log("Archivo no adquirido", error));
-      });
 
     if (e.target.dataset.action === "edit") {
       //THEN
@@ -94,12 +84,14 @@ document.addEventListener("DOMContentLoaded", function () {
         editForm.addEventListener("submit", (e) => {
           // Edición de los datos de la noticia seleccionada
           e.preventDefault();
+          
           const titleInput = document.querySelector("#edit-title").value;
           const authorInput = document.querySelector("#edit-author").value;
           const coverImageInput =
             document.querySelector("#edit-coverImage").value;
           const descInput = document.querySelector("#edit-description").value;
           const editedBook = document.querySelector(`#book-${noticia.id}`);
+          
           fetch(`http://localhost:3000/noticias/${e.target.dataset.id}`, {
             method: "PATCH",
             body: JSON.stringify({
