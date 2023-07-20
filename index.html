@@ -2,28 +2,23 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8" />
-    <title>Listado de Noticias</title>
-    <style>
-      body {
-        display: flex;
-        flex-direction: column;
-        background-color: black;
-        color: white;
-      }
-    </style>
+    <title>APP Noticias - Municipalidad de Patagones</title>
+    <link rel="stylesheet" href="style.css">
   </head>
+  
   <body>
-    <h1>Listado de Noticias</h1>
+    <h1>Carga, Vista y Modificación de Noticias</h1>
     <div id="create-book">
       <form id="book-form">
-        <input id="title" placeholder="Titulo..." />
-        <input id="author" placeholder="Resumen..." />
-        <input id="coverImage" placeholder="Imagen / Foto..." />
-        <input id="description" placeholder="Noticia..." />
+        <input id="title" placeholder="Titulo" required/>
+        <input id="coverImage" placeholder="Enlace a la Imagen / Foto" required/>
+        <textarea id="author" placeholder="Resumen" rows="3" cols="25" required></textarea>
+        <textarea id="description" placeholder="Noticia" rows="5" cols="70" required></textarea>
         <input type="submit" value="Agregar Noticia" />
       </form>
     </div>
     <div id="book-container"></div>
     <script src="index.js"></script>
   </body>
+
 </html>
