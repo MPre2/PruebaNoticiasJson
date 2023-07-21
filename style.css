@@ -69,12 +69,20 @@ footer p {
   #book-container {
     grid-template-columns: auto;
   }
+
+  #book-form {
+    width: 100%;
+  }
 }
 
 @media (min-width: 768px) {
   /*Tablet Display*/
   #book-container {
     grid-template-columns: auto auto;
+  }
+
+  #book-form {
+    width: 100%;
   }
 }
 
@@ -83,8 +91,8 @@ footer p {
   #book-container {
     grid-template-columns: auto auto auto;
   }
-}
 
-@media (max-width: 1366px) {
-  /*Monitor HD Display*/
+  #book-form {
+    width: 100%;
+  }
 }
