@@ -1,24 +1,75 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8" />
+    <!-- Behavioral Meta Data -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Core Meta Data -->
+    <meta content="HollowDevs" name="author" />
+    <meta
+      content="Web APP para la carga, edición y vista de las noticias del Municipio del partido de Patagones"
+      name="Gestor noticias Municipio Patagones"
+    />
+    <meta
+      content="Noticias, Patagones, Municipalidad, Partido de Patagones, Carmen de Patagones"
+      name="keywords"
+    />
+    <!-- Open Graph Meta Data -->
+    <meta
+      content="Web APP para la carga, edición y vista de las noticias del Municipio del partido de Patagones"
+    />
+    <meta content="HollowDevs" />
+    <meta content="HollowDevs" />
+    <meta content="Web APP" />
+    <meta content="index.html" />
+    <!--Favicon-->
+    <link rel="icon" type="image/png" href="/assets/icons8-news-64.png" />
+    <!--Styles-->
+    <link rel="stylesheet" href="style.css" />
+    <!--Site Name-->
     <title>APP Noticias - Municipalidad de Patagones</title>
-    <link rel="stylesheet" href="style.css">
   </head>
-  
+
   <body>
-    <h1>Carga, Vista y Modificación de Noticias</h1>
+    <h1>Carga y Edición de Noticias</h1>
+
     <div id="create-book">
       <form id="book-form">
-        <input id="title" placeholder="Titulo" required/>
-        <input id="coverImage" placeholder="Enlace a la Imagen / Foto" required/>
-        <textarea id="author" placeholder="Resumen" rows="3" cols="25" required></textarea>
-        <textarea id="description" placeholder="Noticia" rows="5" cols="70" required></textarea>
+        <input id="title" placeholder="Titulo" required />
+        <input
+          id="coverImage"
+          placeholder="Enlace a la Imagen / Foto"
+          required
+        />
+        <textarea
+          id="author"
+          placeholder="Resumen"
+          rows="3"
+          cols="25"
+          required
+        ></textarea>
+        <textarea
+          id="description"
+          placeholder="Noticia"
+          rows="5"
+          cols="70"
+          required
+        ></textarea>
         <input type="submit" value="Agregar Noticia" />
       </form>
     </div>
     <div id="book-container"></div>
     <script src="index.js"></script>
+    <footer>
+      <!--Pie de Sitio-->
+      <p class="devs">&copy 2023 - Design & developed by</p>
+      <img
+        src="/assets/logo-no-background.png"
+        alt="Logo Hollow Devs"
+        height="44px"
+        width="138px"
+      />
+    </footer>
   </body>
-
 </html>
