@@ -1,3 +1,6 @@
+//Importamos las funciones del archivo popUps.js
+import { borrado, editado, guardado } from "./popUps";
+
 document.addEventListener("DOMContentLoaded", function () {
   // Modulo para ejecutar todo el contenido cuando se ingresa en el sitio
   const bookContainer = document.querySelector("#book-container");
